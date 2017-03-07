@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myquiz">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular JS Quiz </title>
+   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+ <div id="myQuiz" class="container" ng-controller="mainctrl">
+<h1>Test Your Knowledge:<span>Saturn</span></h1>
+     <div class="progress">
+         <div class="{{($index === activeQuestion) ? 'on':'off'}}
+                    {{myquestion.questionState==='answered'? 'answered' : 'unanswered'}}
+                    {{(myquestion.correctness==='correct') ? 'correct' : 'incorrect'}}"
+                   ng-repeat="myquestion in myQuestions"></div>
+     </div>
+     <div class="intro {{(activeQuestion > -1) ? 'inactive' : 'active'}}">
+         <h3>Welcome</h3>
+         <p>Click begin to test your knowledge of Saturn</p>
+         <p class="btn" ng-click="activeQuestion=0">Begin</p>
+     </div>
+     <div class="question {{myquestion.questionState==='answered'? 'answered' : 'unanswered'}}
+                {{($index === activeQuestion) ? 'active':'inactive'}} "
+          ng-repeat="myquestion in myQuestions">
+         <p class="txt">{{myquestion.question}}</p>
+         <p class="ans" ng-class="{
+                                 image:answer.image,
+                                 selected:isSelected($parent.$index,$index),
+                                 correct:isCorrect($parent.$index,$index)
+                                 }"
+             ng-style="{'background-image':'url({{answer.image}})'}"
+             ng-click="selectAnswer($parent.$index,$index)"
+             ng-repeat="answer in myQuestions[$index].answers">
+             {{answer.text}}
+         </p>
+         <div class="feedback">
+             <p ng-show="myquestion.correctness==='correct'">You are <strong>correct</strong>.</p>
+             <p ng-show="myquestion.correctness==='incorrect'">Oops! That is not correct.</p>
+             <p>{{myquestion.feedback}}</p>
+             <div class="btn" ng-click="selectContinue()">Continue</div>
+         </div>
+     </div>
+     <div class="results {{(totalQuestions===activeQuestion) ? 'active' : 'inactive'}}">
+         <h3>Results</h3>
+         <p>You scored {{percentage}}% by correctly answering {{score}} of total {{totalQuestions}} questions.</p>
+     </div>
+ </div>
+</body>
+</html>
